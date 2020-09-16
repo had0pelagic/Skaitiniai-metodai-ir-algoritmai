@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 os.system("cls")
 # e = np.finfo(float).eps
-e = 2.71828
+# e = 2.71828
 
 
 def f(x):
@@ -17,7 +17,7 @@ def df(x):  # isvestine
 
 
 def g(x):
-    return e**x + e**-x - 100*np.sin(x)**2
+    return np.e**x + np.e**-x - 100*np.sin(x)**2
 
 
 def show_graph(x, func, xlim, ylim, xline1, xline2, xline3, xline4):
