@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from scipy.optimize import fsolve
 
 os.system("cls")
 
@@ -24,10 +25,10 @@ def show_graph(x, func, xlim, ylim, xline1, xline2, xline3, xline4, intervals):
     plt.axvline(0, linewidth=0.5, color="black")
     plt.axhline(0, linewidth=0.5, color="black")
     plt.scatter(0, 0, color="black")
-    plt.scatter(-3.584, 0, color="green")  # f(x) grafiko taskai
-    plt.scatter(-1.903, 0, color="green")
-    plt.scatter(-0.313, 0, color="green")
-    plt.scatter(1.843, 0, color="green")
+    plt.scatter(-3.584, 0, color="green", s=10)  # f(x) grafiko taskai
+    plt.scatter(-1.903, 0, color="green", s=10)
+    plt.scatter(-0.313, 0, color="green", s=10)
+    plt.scatter(1.843, 0, color="green", s=10)
 
     if(xline1 != -999):
         plt.axvline(xline1, 0, color="red")  # tikslus
@@ -38,33 +39,37 @@ def show_graph(x, func, xlim, ylim, xline1, xline2, xline3, xline4, intervals):
     # intervals
     intervals.sort()  # remove
     for i in intervals:
-        plt.axvline(i, 0, linewidth=0.5, color="purple")
+        plt.axvline(i[0], 0, linewidth=0.6, color="purple")
+        plt.axvline(i[1], 0, linewidth=0.6, color="purple")
         print(i)
 
     plt.grid()
     plt.show()
 
 
-def scan_method(acfrom, acto):  # ??
-    accur = 1
-    rn = np.arange(-4.95744, 4.69721, accur)
-    vals = f(rn).tolist()
-    intervals = list()
-    for item in vals:
-        if item > acfrom and item < acto:
-            intervals.append(item)
+def scan_static(acfrom, acto, step):
+    intervals = []
+    first = acfrom
+    last = acto
+    while first < acto:
+        last = first + step
+        if np.sign(f(first)) != np.sign(f(last)):
+            print(str(f(first)) + " " + str(f(last)) + "////////////////////")
+            intervals.append([first, last])
+        first = last
     return intervals
 
+
 # show_graph(np.arange(-1, 6, 0.1), g, (-1, 6),
-#            (-4, 4), -999, 0, 0, 0)  # g(x)
+#            (-4, 4), -999, 0, 0, 0)  # g(x) 2uzd
 # show_graph(np.arange(-5, 3, 0.1), f, (-10, 10),
-#            (-4, 4), -4.95744, 4.69721, -14.59574, 14.59574)  # f(x)
-
-
+#            (-4, 4), -4.95744, 4.69721, -14.59574, 14.59574)  # f(x) 1uzd
 acfrom = -4.95744
 acto = 4.69721
-intervals = scan_method(acfrom, acto)
-
+intervals = scn(acfrom, acto, 0.5)
 
 show_graph(np.arange(-5, 3, 0.1), f, (-10, 10),
            (-4, 4), -4.95744, 4.69721, -14.59574, 14.59574, intervals)  # f(x)
+
+# roots = fsolve(f, [acfrom, acto])  # faster solve, but graph gives 4 roots
+# print(str(roots) + "*******************")
