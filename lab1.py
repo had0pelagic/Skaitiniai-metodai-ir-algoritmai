@@ -55,6 +55,7 @@ def scan_static(acfrom, acto, step):
         last = first + step
         if np.sign(f(first)) != np.sign(f(last)):
             print(str(f(first)) + " " + str(f(last)) + "////////////////////")
+            print(str(first) + " " + str(last) + "--------------")
             intervals.append([first, last])
         first = last
     return intervals
@@ -66,7 +67,7 @@ def scan_static(acfrom, acto, step):
 #            (-4, 4), -4.95744, 4.69721, -14.59574, 14.59574)  # f(x) 1uzd
 acfrom = -4.95744
 acto = 4.69721
-intervals = scn(acfrom, acto, 0.5)
+intervals = scan_static(acfrom, acto, 0.5)
 
 show_graph(np.arange(-5, 3, 0.1), f, (-10, 10),
            (-4, 4), -4.95744, 4.69721, -14.59574, 14.59574, intervals)  # f(x)
