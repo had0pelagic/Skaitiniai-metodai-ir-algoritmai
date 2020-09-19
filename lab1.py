@@ -18,17 +18,16 @@ def g(x):
     return np.e**x + np.e**-x - 100*np.sin(x)**2
 
 
-def show_graph(x, func, xlim, ylim, xline1, xline2, xline3, xline4, intervals):
-    plt.plot(x, func(x))
+def show_graph(x, func, xlim, ylim, xline1, xline2, xline3, xline4, intervals, col, points):
+    plt.plot(x, func(x), col)
     plt.xlim(xlim)
     plt.ylim(ylim)
     plt.axvline(0, linewidth=0.5, color="black")
     plt.axhline(0, linewidth=0.5, color="black")
     plt.scatter(0, 0, color="black")
-    plt.scatter(-3.584, 0, color="green", s=10)  # f(x) grafiko taskai
-    plt.scatter(-1.903, 0, color="green", s=10)
-    plt.scatter(-0.313, 0, color="green", s=10)
-    plt.scatter(1.843, 0, color="green", s=10)
+
+    for point in points:  # graph points
+        plt.scatter(point, 0, color="green", s=10)
 
     if(xline1 != -999):
         plt.axvline(xline1, 0, color="red")  # tikslus
@@ -41,7 +40,6 @@ def show_graph(x, func, xlim, ylim, xline1, xline2, xline3, xline4, intervals):
     for i in intervals:
         plt.axvline(i[0], 0, linewidth=0.6, color="purple")
         plt.axvline(i[1], 0, linewidth=0.6, color="purple")
-        print(i)
 
     plt.grid()
     plt.show()
@@ -54,11 +52,31 @@ def scan_static(acfrom, acto, step):
     while first < acto:
         last = first + step
         if np.sign(f(first)) != np.sign(f(last)):
-            print(str(f(first)) + " " + str(f(last)) + "////////////////////")
-            print(str(first) + " " + str(last) + "--------------")
+            # print(str(f(first)) + " " + str(f(last)) + "////////////////////")
+            # print(str(first) + " " + str(last) + "--------------")
             intervals.append([first, last])
         first = last
     return intervals
+
+
+def iteration_method(intervals):
+    results = []
+    alpha = 100
+    accuracy = 1e-11
+    for interval in intervals:
+        x = interval[0]
+        print("-----FINDING FOR: " + str(x) + "-----")
+        iteration = 1
+        limit = 200
+        while abs(f(x)) > accuracy and iteration < limit:
+            x = x + f(x) / alpha
+            iteration += 1
+            plt.plot([x, x, x + f(x) / alpha], [0, f(x), 0])
+            # print(str(iteration) + " " + str(x) + " " +
+            #       str(abs(f(x))) + " " + str(alpha))
+        results.append(x)
+        alpha *= -1
+    return results
 
 
 # show_graph(np.arange(-1, 6, 0.1), g, (-1, 6),
@@ -68,9 +86,14 @@ def scan_static(acfrom, acto, step):
 acfrom = -4.95744
 acto = 4.69721
 intervals = scan_static(acfrom, acto, 0.5)
-
+print("intervals: " + str(intervals))
+points_iteration = iteration_method(intervals)
+print("iteration method: " + str(points_iteration))
 show_graph(np.arange(-5, 3, 0.1), f, (-10, 10),
-           (-4, 4), -4.95744, 4.69721, -14.59574, 14.59574, intervals)  # f(x)
+           (-4, 4), -4.95744, 4.69721, -14.59574, 14.59574, intervals, "blue", points_iteration)  # f(x)
+# show_graph(np.arange(-5, 3, 0.1), df, (-10, 10),
+#            (-4, 4), -4.95744, 4.69721, -14.59574, 14.59574, intervals, "teal")  # f(x)
 
-# roots = fsolve(f, [acfrom, acto])  # faster solve, but graph gives 4 roots
+# check roots
+# roots = fsolve(f, [1.54256, 2.04256])
 # print(str(roots) + "*******************")
