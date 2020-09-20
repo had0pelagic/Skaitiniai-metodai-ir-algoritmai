@@ -96,7 +96,7 @@ def iteration_method(intervals):
 def newton_method(intervals):
     results = []
     accuracy = 1e-11
-    beta = 0.1  # skirtas konvergavimo taisymui (nebutinas)
+    beta = 0.1  # skirtas konvergavimo taisymui (nebutinas?)
     for interval in intervals:
         x = interval[0]
         print("-----FINDING FOR: " + str(x) + "-----")
@@ -111,6 +111,30 @@ def newton_method(intervals):
     return results
 
 
+def scan_dynamic(intervals, start_step):
+    accuracy = 1e-11
+    results = []
+    for interval in intervals:
+        step = start_step
+        x_from = interval[0]
+        x_to = interval[0]
+        limit = 200
+        iteration = 1
+        print("-----FINDING FOR: " + str(x_from) + "------")
+        while abs(f(x_from)) > accuracy and iteration < limit:
+            iteration += 1
+            x_from += step
+            if np.sign(f(x_from)) != np.sign(f(x_to)):
+                x_from -= step
+                step /= 10
+                x_to = x_from
+            print(str(iteration) + " " + str(x_from) + " " +
+                  str(abs(f(x_from))))
+        results.append(x_from)
+    return results
+
+
+# todo: 5th point, 4th point methods require tables with information
 acfrom = -4.95744
 acto = 4.69721
 rgfrom = -14.59574
@@ -120,18 +144,24 @@ accurate_est = [-4.95744, 4.69721]
 rough_est = [-14.59574, 14.59574]
 
 intervals = scan_static(acfrom, acto, 0.5)  # 3
-print("intervals: " + str(intervals))
+# print("intervals: " + str(intervals))
 
-points_iteration = iteration_method(intervals)
-print("iteration method: " + str(points_iteration))
+# points_iteration = iteration_method(intervals)
+# print("iteration method: " + str(points_iteration))
 
-points_newton = newton_method(intervals)
-print("iteration method: " + str(points_newton))
+# points_newton = newton_method(intervals)
+# print("newton method: " + str(points_newton))
+
+points_scan_dynamic = scan_dynamic(intervals, 0.1)
+print("scan method: " + str(points_scan_dynamic))
 
 # show_graph(np.arange(-5, 3, 0.1), f, (-10, 10),
 #            (-4, 4), acfrom, acto, rgfrom, rgto, intervals, "teal", points_iteration, "Iteration") # iteration 4
+# show_graph(np.arange(-5, 3, 0.1), f, (-10, 10),
+#            (-4, 4), accurate_est, rough_est, intervals, "teal", points_newton, "Newton")  # newton 4
 show_graph(np.arange(-5, 3, 0.1), f, (-10, 10),
-           (-4, 4), accurate_est, rough_est, intervals, "teal", points_newton, "Newton")  # newton 4
+           (-4, 4), accurate_est, rough_est, intervals, "teal", points_scan_dynamic, "Scan dynamic")  # scan_dynamic 4
+
 # show_graph_simple(np.arange(-5, 3, 0.1), g, (-10, 10),
 #                   (-4, 4), accurate_est, rough_est, "blue", "g(x)") # g(x) 2
 # show_graph_simple(np.arange(-5, 3, 0.1), f, (-10, 10),
