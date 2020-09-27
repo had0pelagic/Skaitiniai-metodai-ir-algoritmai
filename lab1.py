@@ -156,7 +156,7 @@ def info_print(information, intervals, title):
     print("-----------------------------------------------------")
 
 
-accurate_est = [-4.95744, 4.69721]
+accurate_est = [-4.95744, 4.68724]
 rough_est = [-14.59574, 14.59574]
 accurate_est_g = [-1, 6]
 
@@ -210,8 +210,8 @@ elif option == '5':
                       accurate_est, rough_est, "blue", "f(x)")
 elif option == '6':
     print("g(x)")
-    show_graph_simple(np.arange(-5, 3, 0.1), g, (-1, 6),
-                      (-4, 4), accurate_est, rough_est, "blue", "g(x)")
+    show_graph_simple(np.arange(-1, 6, 0.00001), g, (-1, 6),
+                      (-4, 4), accurate_est_g, rough_est, "blue", "g(x)")
 
 elif option == '7':
     title = "g(x) Iteration method"
