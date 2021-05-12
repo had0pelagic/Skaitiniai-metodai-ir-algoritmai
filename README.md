@@ -1,1 +1,1 @@
-# Skaitiniai-metodai-ir-algoritmai-Lab1
+# Skaitiniai-metodai-ir-algoritmai-Lab2
